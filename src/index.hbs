@@ -1,0 +1,54 @@
+{{#extend "base"}}
+
+  {{#content "jsonld"}}
+    <script type="application/ld+json">
+      {
+        "@context": "http://schema.org",
+        "@type": "Website",
+        "publisher": "{{site.title}}",
+        "url": "{{site.url}}",
+        "image": "{{site.url}}/assets/logo.png",
+        "description": "{{site.description}}"
+      }
+    </script>
+  {{/content}}
+
+  {{#content "header"}}
+
+    <div class="index-header">
+      <img src="/assets/bg/2048x1365.jpg"
+           srcset="/assets/bg/1600x1067.jpg 1600w, /assets/bg/2048x1365.jpg 2048w, /assets/bg/original.jpg 5184w"
+           sizes="100vw">
+
+      <nav>
+        <a class="subscribe-button icon-feed" href="/rss/">Subscribe</a>
+      </nav>
+
+      <div>
+        <h1>{{site.title}}</h1>
+        <h2>{{site.description}}</h2>
+      </div>
+    </div>
+
+  {{/content}}
+
+  {{#content "body"}}
+
+    {{#each collections.posts}}
+      <article class="post-excerpt">
+        <header>
+          <h2><a href="/{{permalink}}">{{title}}</a></h2>
+        </header>
+        <p>
+          {{limit 150 (stripTags excerpt)}}
+          <a class="read-more" href="/{{permalink}}">»</a>
+        </p>
+        <footer class="post-meta">
+          <time datetime="{{iso date}}">{{prettyDate date}}</time>
+        </footer>
+      </article>
+    {{/each}}
+
+  {{/content}}
+
+{{/extend}}

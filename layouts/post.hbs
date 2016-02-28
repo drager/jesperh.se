@@ -1,0 +1,70 @@
+{{#extend "base"}}
+
+  {{#content "jsonld"}}
+    <script type="application/ld+json">
+      {
+        "@context": "http://schema.org",
+        "@type": "Article",
+        "publisher": "Jesper Håkansson",
+        "author": {
+        "@type": "Person",
+          "name": "Jesper Håkansson",
+          "url": "https://jesperh.se/author/jesper",
+          "sameAs": "https://github.com/drager"
+        },
+        "headline": "{{title}}",
+        "url": "{{site.url}}/{{permalink}}",
+        "datePublished": "{{iso date}}",
+        {{#if modified}}"dateModified": "{{iso modified}}",{{/if}}
+        {{#if keywords}}"keywords": "{{keywords}}",{{/if}}
+        {{#if lang}}"inLanguage": "{{lang}}",{{/if}}
+        {{#unless lang}}"inLanguage": "sv",{{/unless}}
+        "description": "{{stripTags excerpt}}"
+      }
+    </script>
+  {{/content}}
+
+  {{#content "title"}}{{title}}{{/content}}
+
+  {{#content "header"}}
+
+    <nav>
+      <a class="subscribe-button icon-feed" href="/rss/">Subscribe</a>
+      <a class="back-button icon-arrow-left" href="/">Home</a>
+    </nav>
+
+  {{/content}}
+
+
+  {{#content "body"}}
+
+    <article {{#if lang}}lang="{{lang}}"{{/if}} class="post">
+      <header>
+        <h1>{{title}}</h1>
+        <time datetime="{{iso date}}">{{prettyDate date}}</time>
+      </header>
+
+      <section class="post-content">
+        {{{contents}}}
+      </section>
+    </article>
+
+    <aside class="post">
+      <div id="comments"></div>
+       <script src="https://apis.google.com/js/plusone.js"></script>
+       <script type="text/javascript" async>
+       var commentsWidth = document.getElementById('comments').offsetWidth;
+        window.addEventListener('load', function () {
+          gapi.comments.render('comments', {
+            href: '{{site.url}}/{{permalink}}/',
+            width: commentsWidth,
+            first_party_property: 'BLOGGER',
+            view_type: 'FILTERED_POSTMOD',
+          });
+        });
+      </script>
+    </aside>
+
+  {{/content}}
+
+{{/extend}}

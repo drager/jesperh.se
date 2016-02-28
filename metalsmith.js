@@ -122,6 +122,7 @@ const metalsmith = Metalsmith(__dirname)
   .use(fileMetadata([
     {pattern: 'posts/*', metadata: {type: 'post', layout: 'post.hbs'}},
   ]))
+  .use(elevate({pattern: 'posts/**/*'}))
   .use(markdown('full', remarkable))
   .use(permalinks())
   .use(excerpts())

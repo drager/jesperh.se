@@ -16,7 +16,7 @@ For those who are interested at helping out or looking at the source it is avail
 It also provides a binding to shelf which is optional to use but easy to get started with.
 
 Example using shelf:
-```
+```dart
 
 import 'package:shelf/shelf.dart' as shelf;
 import 'package:shelf/shelf_io.dart' as io;
@@ -74,7 +74,7 @@ And making the following request attempts to retrieve the name and length of the
 `http://localhost:8080/?paths=[["todos", "name"]]&method=get`
 
 The following route will return this response:
-```
+```dart
 {
   "jsonGraph": {
     "todos": {
@@ -92,7 +92,7 @@ If we want to get the length we can make this request:
 `http://localhost:8080/?paths=[["todos", "length"]]`
 
 Which will return:
-```
+```dart
 {
   "jsonGraph": {
     "todos": {
@@ -107,7 +107,7 @@ And if we want to match both we can make the following request:
 `http://localhost:8080/?paths=[["todos", ["name", "length"]]]`
 
 It will result in this response:
-```
+```dart
 {
   "jsonGraph": {
     "todos": {

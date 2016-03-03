@@ -13,11 +13,11 @@ An observable is a stream of events. It's not that different from an array, exce
 And what Rx let's us do is act on an observable just as we act on an array. So we can use all the awesome array functions that we know. Such as `map`, `filter`, `reduce` and so on. Rx has even some more functions such as `zip`, `flatMap`, `takeUntil` to name a few.
 
 So for example, take an array like this:
-```
+```javascript
 [1, 2, 3].forEach(item => console.log(item));
 ```
 Here we are using the array method forEach and the items are logged out right away. We can use the forEach method on an observable as well, but with an observable, forEach executes over time, that is asynchronously.
-```
+```javascript
 const observable = Rx.Observable.interval(500).take(4);
 
 observable.forEach(item => console.log(item))
@@ -25,7 +25,7 @@ observable.forEach(item => console.log(item))
 Here the numbers 0, 1, 2, 3 are logged out to the console one by one each 500 ms.
 
 Moving on to creating an observable from scratch. To do that we can use the `Rx.Observable.create()` method and it’s not so very different from creating an promise:
-```
+```javascript
 // Creating a promise
 const promise = new Promise((resolve) => {
   setTimeout(() => {
@@ -37,7 +37,7 @@ const promise = new Promise((resolve) => {
 promise.then(value => console.log(value));
 ```
 And for creating an observable:
-```
+```javascript
 // Creating an observable
 const observable = Rx.Observable.create((observer) => {
   setTimeout(() => {
@@ -53,7 +53,7 @@ An observable is very familiar to a promise. But an observable can return many v
 A technical difference between promises and observables is that observables are lazy which means that they does not start producing data until they are "listened" to. The "listening" is called a subscription. An observable can also emit many values and a promise can only emit one value. A promise cannot be canceled and will not tell when it's completed, which an observable can.
 
 To show of the "laziness", take this code for example:
-```
+```javascript
 // This would console log 'promise'
 const promise = new Promise((resolve) => {
   console.log('promise');
@@ -67,7 +67,7 @@ const observable = Rx.Observable.create((observer) => {
 });
 ```
 The observable would not console log out 'observable' but the promise would console log out 'promise'. As I said before, we need to subscribe to the observable for it to start emitting values. And to do that we simply call the `subscribe` or the `forEach` method on the observable. Just like this:
-```
+```javascript
 observable.subscribe(
   // Will log the number 10
   (x) => console.log(x),
@@ -81,7 +81,7 @@ And now the observable starts to emit values and
 the first argument for the subscribe method is the next handler which is called when the observable emits a value like this: `observer.onNext(10);`. The second argument is the error handler which is called if observable has encountered some error and the last argument is the complete handler which is called when the `onCompleted` method is called, that is after it has called onNext for the final time, if it has not encountered any errors.
 
 We can also unsubscribe from observables (unlike promises). To unsubscribe just call the `dispose` method on the subscription, like this:
-```
+```javascript
 const observable = Rx.Observable.interval(500).take(4);
 
 const subscription = observable.subscribe(
@@ -94,7 +94,7 @@ setTimeout(() => {
 }, 1500);
 ```
 Now we wont get any more data after the 1500 ms has gone and it will console log out:
-```
+```javascript
 0
 1
 2
@@ -105,7 +105,7 @@ That's just a basic example how we can create an observable from scratch, subscr
 `Rx.Observable.fromPromise()`.
 
 Here's a simple example that creates an observable collection of events from the button element and the click event:
-```
+```javascript
 const buttonElement = document.querySelector('button');
 
 const observable = Rx.Observable.fromEvent(buttonElement, 'click');
@@ -117,7 +117,7 @@ observable.forEach(
 This would console log 'clicked' every time we click on the buttonElement.
 
 Another example that creates an observable collection from an promise:
-```
+```javascript
 const observable = Rx.Observable.fromPromise(
   fetch('https://api.github.com/repositories')
     .then(response => response.json()));

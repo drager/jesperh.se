@@ -1,6 +1,7 @@
 ---
 title: Reactive extensions in Javascript
 lang: en
+alias: [2016/01/14/reactive-extensions-in-javascript]
 ---
 
 I have done my deep dive in Reactive Extensions, abbreviated called just Rx. And Rx is a library created by Microsoft. It exists in many different languages such as Java, C#, C, Javascript and many other languages. The Javascript version is where I have put my focus.

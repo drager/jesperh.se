@@ -1,6 +1,7 @@
 ---
 title: Switching from gulp to npm scripts
 lang: en
+alias: [2015/09/20/switching-from-gulp-to-npm-scripts]
 ---
 
 We have been using a large build configuration in our angular application using gulp. Everything  from transpiling ES6, compiling sass, concatenating files and minifying them to trigger live reload. This resulted in a lot of configuration files for each task. Dividing each task into its on file is better than having everything in a tremendous file so this configuration was fine but not the best option for us. The bad truth with this configuration was that one or two people knows how this works (that had set it up once), so that affected the whole team a bit.

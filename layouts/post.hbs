@@ -50,18 +50,16 @@
     </article>
 
     <aside class="post">
-      <div id="comments"></div>
-       <script src="https://apis.google.com/js/plusone.js"></script>
-       <script type="text/javascript" async>
-       var commentsWidth = document.getElementById('comments').offsetWidth;
-        window.addEventListener('load', function () {
-          gapi.comments.render('comments', {
-            href: '{{site.url}}/{{permalink}}/',
-            width: commentsWidth,
-            first_party_property: 'BLOGGER',
-            view_type: 'FILTERED_POSTMOD',
-          });
-        });
+      <div id="disqus_thread"></div>
+      <script>
+        (function() {
+          var d = document, s = d.createElement('script');
+
+          s.src = '//jesperh.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
       </script>
     </aside>
 

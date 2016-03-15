@@ -22,6 +22,7 @@ const markdown = require('metalsmith-markdown-remarkable');
 const fileMetadata = require('metalsmith-filemetadata');
 const sass = require('metalsmith-sass');
 const watch = require('metalsmith-watch');
+const aliases = require('metalsmith-aliases');
 
 handlebars.registerHelper(handlebarsLayouts(handlebars));
 handlebars.registerHelper('prettyDate', date => date.toLocaleDateString('sv-SE', {day: 'numeric', month: 'long', year: 'numeric'}));
@@ -47,29 +48,6 @@ const remarkable = {
     return ''; // use external default escaping
   },
 };
-
-function rewriteToDateUrls(options) {
-  options = options || {};
-  const replacement = options.replacement || '/';
-
-  return function rewriteToDateUrls(files, metalsmith, done) {
-    Object.keys(files).map(file => Object.assign(files[file], {oldName: file}))
-      .filter(file => file.date !== undefined)
-      .filter(file => file.permalink !== undefined)
-      .forEach(file => {
-        if (!file.rewritenDateUrl) {
-          const date = file.date.toISOString().replace(/\T.*/, '').replace(/\-/g, replacement);
-          file.rewritenDateUrl = `${date}/${file.permalink}`;
-        }
-
-        file.rewritenDateUrl = file.rewritenDateUrl;
-        const newName = path.join(file.rewritenDateUrl, 'index.html');
-
-        files[newName] = file;
-      });
-    done();
-  }
-}
 
 function permalinks(options) {
   options = options || {};
@@ -148,7 +126,7 @@ const metalsmith = Metalsmith(__dirname)
   .use(elevate({pattern: 'posts/**/*'}))
   .use(markdown('full', remarkable))
   .use(permalinks())
-  .use(rewriteToDateUrls())
+  .use(aliases({redirect: true}))
   .use(excerpts())
   .use(filenames())
   .use(layouts({

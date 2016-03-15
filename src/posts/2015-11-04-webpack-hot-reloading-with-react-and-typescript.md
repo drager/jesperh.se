@@ -1,7 +1,7 @@
 ---
 title: Using Webpack with hot reload for React and TypeScript
 lang: en
-alias: [2015/11/04/webpack-hot-reloading-with-react-and-typescript]
+aliases: [2015/11/04/webpack-hot-reloading-with-react-and-typescript]
 ---
 
 JavaScript is growing fast and the build systems evolves. It's then hard to choose the right tool in this plethora of tools.

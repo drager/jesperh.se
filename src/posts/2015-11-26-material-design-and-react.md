@@ -1,7 +1,7 @@
 ---
 title: Material design and React
 lang: en
-alias: [2015/11/26/material-design-and-react]
+aliases: [2015/11/26/material-design-and-react]
 ---
 
 Using material design with React is very easy and this blogpost will briefly go through using Material Design in React with material-ui.

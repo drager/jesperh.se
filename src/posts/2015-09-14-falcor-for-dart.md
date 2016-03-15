@@ -1,7 +1,7 @@
 ---
 title: Falcor for dart
 lang: en
-alias: [2015/09/14/falcor-for-dart]
+aliases: [2015/09/14/falcor-for-dart]
 ---
 
 [Rasmus](https://rasmus.eneman.eu) and I have for a while been working on to port the

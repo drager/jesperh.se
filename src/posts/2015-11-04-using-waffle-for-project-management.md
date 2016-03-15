@@ -1,7 +1,7 @@
 ---
 title: Using Waffle for project management
 lang: en
-alias: [2015/11/04/using-waffle-for-project-management]
+aliases: [2015/11/04/using-waffle-for-project-management]
 ---
 
 In my project I'll be using [Waffle](https://waffle.io/) for project management. Waffle provides a project management board with an minimalistic interface, unlike other project management boards. It's not cluttered with stuff that you don't need and it integrates very well with Github where most of your issues already are present.

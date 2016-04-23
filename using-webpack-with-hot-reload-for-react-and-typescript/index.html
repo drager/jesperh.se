@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="sv">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Using Webpack with hot reload for React and TypeScript</title>
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic|Open+Sans:700,400|Roboto+Slab">
+
+    <link rel="canonical" href="https://jesperh.se">
+    <meta name="referrer" content="origin">
+
+    <meta property="og:site_name" content="Jesper Håkansson">
+    <meta property="og:description" content="Studies web development. Dart, JS and opensource lover.">
+
+      <meta property="og:site_name" content="Jesper Håkansson">
+      <meta property="og:type" content="website">
+      <meta property="og:title" content="Jesper Håkansson">
+      <meta property="og:url" content="https://jesperh.se">
+      <meta property="og:image" content="https://jesperh.se/assets/logo.png">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Jesper Håkansson">
+    <meta name="twitter:description" content="Studies web development. Dart, JS and opensource lover.">
+    <meta name="twitter:url" content="https://jesperh.se">
+    <meta name="twitter:image:src" content="https://jesperh.se/assets/logo.png">
+
+    <link rel="alternate" type="application/rss+xml" title="Jesper Håkansson" href="https://jesperh.se/rss/">
+        <script type="application/ld+json">
+      {
+        "@context": "http://schema.org",
+        "@type": "Article",
+        "publisher": "Jesper Håkansson",
+        "author": {
+        "@type": "Person",
+          "name": "Jesper Håkansson",
+          "url": "https://jesperh.se/author/jesper",
+          "sameAs": "https://github.com/drager"
+        },
+        "headline": "Using Webpack with hot reload for React and TypeScript",
+        "url": "https://jesperh.se/using-webpack-with-hot-reload-for-react-and-typescript",
+        "datePublished": "2015-11-04T00:00:00.000Z",
+        
+        
+        "inLanguage": "en",
+        
+        "description": "JavaScript is growing fast and the build systems evolves. It’s then hard to choose the right tool in this plethora of tools."
+      }
+    </script>
+
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-34213271-2', 'auto');
+ga('send', 'pageview');
+    </script>
+  </head>
+  <body>
+    <header class="site-header">
+      
+    <nav>
+      <a class="subscribe-button icon-feed" href="/rss/">Subscribe</a>
+      <a class="back-button icon-arrow-left" href="/">Home</a>
+    </nav>
+
+
+    </header>
+    <main>
+      
+    <article lang="en" class="post">
+      <header>
+        <h1>Using Webpack with hot reload for React and TypeScript</h1>
+        <time datetime="2015-11-04T00:00:00.000Z">November 4, 2015</time>
+      </header>
+
+      <section class="post-content">
+        <p>JavaScript is growing fast and the build systems evolves. It’s then hard to choose the right tool in this plethora of tools.</p>
+<p>In my project I choose to use <a href="https://github.com/webpack/webpack">Webpack</a>, mainly because I want <a href="https://github.com/gaearon/react-hot-loader">hot reloading</a> which basically means that when I update a component, the component will get replaced without a whole page refresh. Webpack also felt like an ease to use and I wanted to try it out.</p>
+<p>Another thing I wanted to use was TypeScript, because of the static typing. It helps to catch early errors and will give me better suggestions from the code editor.</p>
+<p>Using Webpack with TypeScript wasn’t all ease… I knew that TypeScript had to be compiled before ES6 for it to work, so basically I sat the order to be:</p>
+<blockquote>
+<p>Run babel and then the ts compiler.</p>
+</blockquote>
+<p>This didn’t work out very well though…</p>
+<p>I knew I had to have a <code>.babelrc</code> file that specified my presets so babel basically knew what to do. But somehow the Webpack loader did not get that configuration from the <code>.babelrc</code> file. After some documentation lookups I found that the <code>query</code> property could be passed to the loaders.</p>
+<p>So what I did was to pass almost the same that I had in my <code>.babelrc</code> file. That is:</p>
+<pre><code class="language-javascript"><span class="token string" >'babel?'</span> <span class="token operator" >+</span> JSON<span class="token punctuation" >.</span><span class="token function" >stringify</span><span class="token punctuation" >(</span><span class="token punctuation" >{</span>
+  presets<span class="token punctuation" >:</span> <span class="token punctuation" >[</span><span class="token string" >'react'</span><span class="token punctuation" >,</span> <span class="token string" >'es2015'</span><span class="token punctuation" >,</span> <span class="token string" >'stage-1'</span><span class="token punctuation" >]</span><span class="token punctuation" >,</span>
+<span class="token punctuation" >}</span><span class="token punctuation" >)</span><span class="token punctuation" >,</span>
+</code></pre>
+<p>Now TypeScript worked just fine. Now the only thing left was hot reload.</p>
+<p>So I was running the Webpack dev server with the <code>--hot</code> parameter already (<code>webpack-dev-server --hot --inline --port 3000</code>), and the only thing I needed to do was to add the <code>'react-hot'</code> loader to the list of loaders:</p>
+<pre><code class="language-javascript">loaders<span class="token punctuation" >:</span> <span class="token punctuation" >[</span>
+  <span class="token punctuation" >{</span>
+    test<span class="token punctuation" >:</span> <span class="token regex" >/\.ts(x?)$/</span><span class="token punctuation" >,</span>
+    exclude<span class="token punctuation" >:</span> <span class="token regex" >/node_modules/</span><span class="token punctuation" >,</span>
+    loaders<span class="token punctuation" >:</span> <span class="token punctuation" >[</span>
+      <span class="token string" >'react-hot'</span><span class="token punctuation" >,</span>
+      <span class="token string" >'babel?'</span> <span class="token operator" >+</span> JSON<span class="token punctuation" >.</span><span class="token function" >stringify</span><span class="token punctuation" >(</span><span class="token punctuation" >{</span>
+        presets<span class="token punctuation" >:</span> <span class="token punctuation" >[</span><span class="token string" >'react'</span><span class="token punctuation" >,</span> <span class="token string" >'es2015'</span><span class="token punctuation" >,</span> <span class="token string" >'stage-1'</span><span class="token punctuation" >]</span><span class="token punctuation" >,</span>
+      <span class="token punctuation" >}</span><span class="token punctuation" >)</span><span class="token punctuation" >,</span>
+      <span class="token string" >'ts'</span><span class="token punctuation" >,</span>
+    <span class="token punctuation" >]</span><span class="token punctuation" >,</span>
+  <span class="token punctuation" >}</span><span class="token punctuation" >,</span>
+</code></pre>
+<p>And now the hot reload worked very well together with React and TypeScript.</p>
+<p>But as I have noticed in projects using TypeScript it’s very easy to get conflicts with TypeScripts configuration files. To avoid this I added a <code>tsconfig.base.json</code> which stores my configuration. And to copy the contents of this file over to the “real” <code>tsconfig.json</code> file I added a NPM script for that in the setup phase: <code>&quot;setup:tsconfig&quot;: &quot;cp tsconfig.base.json tsconfig.json&quot;,</code></p>
+<p>The same goes for custom typings. I added a <code>typings_custom</code> folder which will contain my own typings. That is if I want a library that does not have any typings at the <strong>DefinitelyTyped</strong> typing repository. And for that to work out I need a NPM script that looks something like this:  <code>&quot;setup:typings_custom&quot;: &quot;cp -a typings_custom/* typings/&quot;,</code>.</p>
+<p>And that’s it.</p>
+<p>For full configuration checkout this <a href="https://gist.github.com/drager/5f190a170bd55d415150">gist</a>.</p>
+
+      </section>
+    </article>
+
+    <aside class="post">
+      <div id="disqus_thread"></div>
+      <script>
+        (function() {
+          var d = document, s = d.createElement('script');
+
+          s.src = '//jesperh.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    </aside>
+
+
+    </main>
+    <footer class="site-footer">
+      <section class="copyright">
+        <a href="https://jesperh.se">Jesper Håkansson</a> &copy; 2016
+        <a href="https://flic.kr/p/dz1YKB">Picture by JFXie used under CC BY</a>
+      </section>
+    </footer>
+  </body>
+</html>

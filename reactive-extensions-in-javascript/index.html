@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="sv">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Reactive extensions in Javascript</title>
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic|Open+Sans:700,400|Roboto+Slab">
+
+    <link rel="canonical" href="https://jesperh.se">
+    <meta name="referrer" content="origin">
+
+    <meta property="og:site_name" content="Jesper Håkansson">
+    <meta property="og:description" content="Studies web development. Dart, JS and opensource lover.">
+
+      <meta property="og:site_name" content="Jesper Håkansson">
+      <meta property="og:type" content="website">
+      <meta property="og:title" content="Jesper Håkansson">
+      <meta property="og:url" content="https://jesperh.se">
+      <meta property="og:image" content="https://jesperh.se/assets/logo.png">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Jesper Håkansson">
+    <meta name="twitter:description" content="Studies web development. Dart, JS and opensource lover.">
+    <meta name="twitter:url" content="https://jesperh.se">
+    <meta name="twitter:image:src" content="https://jesperh.se/assets/logo.png">
+
+    <link rel="alternate" type="application/rss+xml" title="Jesper Håkansson" href="https://jesperh.se/rss/">
+        <script type="application/ld+json">
+      {
+        "@context": "http://schema.org",
+        "@type": "Article",
+        "publisher": "Jesper Håkansson",
+        "author": {
+        "@type": "Person",
+          "name": "Jesper Håkansson",
+          "url": "https://jesperh.se/author/jesper",
+          "sameAs": "https://github.com/drager"
+        },
+        "headline": "Reactive extensions in Javascript",
+        "url": "https://jesperh.se/reactive-extensions-in-javascript",
+        "datePublished": "2016-01-14T00:00:00.000Z",
+        
+        
+        "inLanguage": "en",
+        
+        "description": "I have done my deep dive in Reactive Extensions, abbreviated called just Rx. And Rx is a library created by Microsoft. It exists in many different languages such as Java, C#, C, Javascript and many other languages. The Javascript version is where I have put my focus."
+      }
+    </script>
+
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-34213271-2', 'auto');
+ga('send', 'pageview');
+    </script>
+  </head>
+  <body>
+    <header class="site-header">
+      
+    <nav>
+      <a class="subscribe-button icon-feed" href="/rss/">Subscribe</a>
+      <a class="back-button icon-arrow-left" href="/">Home</a>
+    </nav>
+
+
+    </header>
+    <main>
+      
+    <article lang="en" class="post">
+      <header>
+        <h1>Reactive extensions in Javascript</h1>
+        <time datetime="2016-01-14T00:00:00.000Z">January 14, 2016</time>
+      </header>
+
+      <section class="post-content">
+        <p>I have done my deep dive in Reactive Extensions, abbreviated called just Rx. And Rx is a library created by Microsoft. It exists in many different languages such as Java, C#, C, Javascript and many other languages. The Javascript version is where I have put my focus.</p>
+<p>First just let’s just go through what an observable is.</p>
+<h1>Observable</h1>
+<p>An observable is a stream of events. It’s not that different from an array, except that the items in an observable happens over time, asynchronously. So we can think of an observable as an asynchronous array.</p>
+<p>And what Rx let’s us do is act on an observable just as we act on an array. So we can use all the awesome array functions that we know. Such as <code>map</code>, <code>filter</code>, <code>reduce</code> and so on. Rx has even some more functions such as <code>zip</code>, <code>flatMap</code>, <code>takeUntil</code> to name a few.</p>
+<p>So for example, take an array like this:</p>
+<pre><code class="language-javascript"><span class="token punctuation" >[</span><span class="token number" >1</span><span class="token punctuation" >,</span> <span class="token number" >2</span><span class="token punctuation" >,</span> <span class="token number" >3</span><span class="token punctuation" >]</span><span class="token punctuation" >.</span><span class="token function" >forEach</span><span class="token punctuation" >(</span>item <span class="token operator" >=</span><span class="token operator" >></span> console<span class="token punctuation" >.</span><span class="token function" >log</span><span class="token punctuation" >(</span>item<span class="token punctuation" >)</span><span class="token punctuation" >)</span><span class="token punctuation" >;</span>
+</code></pre>
+<p>Here we are using the array method forEach and the items are logged out right away. We can use the forEach method on an observable as well, but with an observable, forEach executes over time, that is asynchronously.</p>
+<pre><code class="language-javascript"><span class="token keyword" >const</span> observable <span class="token operator" >=</span> Rx<span class="token punctuation" >.</span>Observable<span class="token punctuation" >.</span><span class="token function" >interval</span><span class="token punctuation" >(</span><span class="token number" >500</span><span class="token punctuation" >)</span><span class="token punctuation" >.</span><span class="token function" >take</span><span class="token punctuation" >(</span><span class="token number" >4</span><span class="token punctuation" >)</span><span class="token punctuation" >;</span>
+
+observable<span class="token punctuation" >.</span><span class="token function" >forEach</span><span class="token punctuation" >(</span>item <span class="token operator" >=</span><span class="token operator" >></span> console<span class="token punctuation" >.</span><span class="token function" >log</span><span class="token punctuation" >(</span>item<span class="token punctuation" >)</span><span class="token punctuation" >)</span>
+</code></pre>
+<p>Here the numbers 0, 1, 2, 3 are logged out to the console one by one each 500 ms.</p>
+<p>Moving on to creating an observable from scratch. To do that we can use the <code>Rx.Observable.create()</code> method and it’s not so very different from creating an promise:</p>
+<pre><code class="language-javascript"><span class="token comment" spellcheck="true">// Creating a promise</span>
+<span class="token keyword" >const</span> promise <span class="token operator" >=</span> <span class="token keyword" >new</span> <span class="token class-name" >Promise</span><span class="token punctuation" >(</span><span class="token punctuation" >(</span>resolve<span class="token punctuation" >)</span> <span class="token operator" >=</span><span class="token operator" >></span> <span class="token punctuation" >{</span>
+  <span class="token function" >setTimeout</span><span class="token punctuation" >(</span><span class="token punctuation" >(</span><span class="token punctuation" >)</span> <span class="token operator" >=</span><span class="token operator" >></span> <span class="token punctuation" >{</span>
+    <span class="token function" >resolve</span><span class="token punctuation" >(</span><span class="token number" >10</span><span class="token punctuation" >)</span><span class="token punctuation" >;</span>
+  <span class="token punctuation" >}</span><span class="token punctuation" >,</span> <span class="token number" >300</span><span class="token punctuation" >)</span><span class="token punctuation" >;</span>
+<span class="token punctuation" >}</span><span class="token punctuation" >)</span><span class="token punctuation" >;</span>
+
+<span class="token comment" spellcheck="true">// Would console log 10 after 300 ms</span>
+promise<span class="token punctuation" >.</span><span class="token function" >then</span><span class="token punctuation" >(</span>value <span class="token operator" >=</span><span class="token operator" >></span> console<span class="token punctuation" >.</span><span class="token function" >log</span><span class="token punctuation" >(</span>value<span class="token punctuation" >)</span><span class="token punctuation" >)</span><span class="token punctuation" >;</span>
+</code></pre>
+<p>And for creating an observable:</p>
+<pre><code class="language-javascript"><span class="token comment" spellcheck="true">// Creating an observable</span>
+<span class="token keyword" >const</span> observable <span class="token operator" >=</span> Rx<span class="token punctuation" >.</span>Observable<span class="token punctuation" >.</span><span class="token function" >create</span><span class="token punctuation" >(</span><span class="token punctuation" >(</span>observer<span class="token punctuation" >)</span> <span class="token operator" >=</span><span class="token operator" >></span> <span class="token punctuation" >{</span>
+  <span class="token function" >setTimeout</span><span class="token punctuation" >(</span><span class="token punctuation" >(</span><span class="token punctuation" >)</span> <span class="token operator" >=</span><span class="token operator" >></span> <span class="token punctuation" >{</span>
+     observer<span class="token punctuation" >.</span><span class="token function" >onNext</span><span class="token punctuation" >(</span><span class="token number" >10</span><span class="token punctuation" >)</span><span class="token punctuation" >;</span>
+  <span class="token punctuation" >}</span><span class="token punctuation" >,</span> <span class="token number" >300</span><span class="token punctuation" >)</span><span class="token punctuation" >;</span>
+<span class="token punctuation" >}</span><span class="token punctuation" >)</span><span class="token punctuation" >;</span>
+
+<span class="token comment" spellcheck="true">// Would console log 10 after 300 ms</span>
+observable<span class="token punctuation" >.</span><span class="token function" >forEach</span><span class="token punctuation" >(</span>value <span class="token operator" >=</span><span class="token operator" >></span> console<span class="token punctuation" >.</span><span class="token function" >log</span><span class="token punctuation" >(</span>value<span class="token punctuation" >)</span><span class="token punctuation" >)</span><span class="token punctuation" >;</span>
+</code></pre>
+<p>An observable is very familiar to a promise. But an observable can return many values instead of one value that a promise can emit. There’s a very little difference in syntax as you can see. The difference here is that we are using <code>forEach</code> on an observable instead of <code>then</code>.</p>
+<p>A technical difference between promises and observables is that observables are lazy which means that they does not start producing data until they are “listened” to. The “listening” is called a subscription. An observable can also emit many values and a promise can only emit one value. A promise cannot be canceled and will not tell when it’s completed, which an observable can.</p>
+<p>To show of the &quot;laziness&quot;, take this code for example:</p>
+<pre><code class="language-javascript"><span class="token comment" spellcheck="true">// This would console log 'promise'</span>
+<span class="token keyword" >const</span> promise <span class="token operator" >=</span> <span class="token keyword" >new</span> <span class="token class-name" >Promise</span><span class="token punctuation" >(</span><span class="token punctuation" >(</span>resolve<span class="token punctuation" >)</span> <span class="token operator" >=</span><span class="token operator" >></span> <span class="token punctuation" >{</span>
+  console<span class="token punctuation" >.</span><span class="token function" >log</span><span class="token punctuation" >(</span><span class="token string" >'promise'</span><span class="token punctuation" >)</span><span class="token punctuation" >;</span>
+<span class="token punctuation" >}</span><span class="token punctuation" >)</span><span class="token punctuation" >;</span>
+
+<span class="token comment" spellcheck="true">// This would not console log 'observable' before we have subscribed to it.</span>
+<span class="token keyword" >const</span> observable <span class="token operator" >=</span> Rx<span class="token punctuation" >.</span>Observable<span class="token punctuation" >.</span><span class="token function" >create</span><span class="token punctuation" >(</span><span class="token punctuation" >(</span>observer<span class="token punctuation" >)</span> <span class="token operator" >=</span><span class="token operator" >></span> <span class="token punctuation" >{</span>
+  observer<span class="token punctuation" >.</span><span class="token function" >onNext</span><span class="token punctuation" >(</span><span class="token number" >10</span><span class="token punctuation" >)</span><span class="token punctuation" >;</span>
+  console<span class="token punctuation" >.</span><span class="token function" >log</span><span class="token punctuation" >(</span><span class="token string" >'observable'</span><span class="token punctuation" >)</span><span class="token punctuation" >;</span>
+  observer<span class="token punctuation" >.</span><span class="token function" >onCompleted</span><span class="token punctuation" >(</span><span class="token punctuation" >)</span><span class="token punctuation" >;</span>
+<span class="token punctuation" >}</span><span class="token punctuation" >)</span><span class="token punctuation" >;</span>
+</code></pre>
+<p>The observable would not console log out ‘observable’ but the promise would console log out 'promise’. As I said before, we need to subscribe to the observable for it to start emitting values. And to do that we simply call the <code>subscribe</code> or the <code>forEach</code> method on the observable. Just like this:</p>
+<pre><code class="language-javascript">observable<span class="token punctuation" >.</span><span class="token function" >subscribe</span><span class="token punctuation" >(</span>
+  <span class="token comment" spellcheck="true">// Will log the number 10</span>
+  <span class="token punctuation" >(</span>x<span class="token punctuation" >)</span> <span class="token operator" >=</span><span class="token operator" >></span> console<span class="token punctuation" >.</span><span class="token function" >log</span><span class="token punctuation" >(</span>x<span class="token punctuation" >)</span><span class="token punctuation" >,</span>
+  <span class="token comment" spellcheck="true">// Would log the error if there was one</span>
+  <span class="token punctuation" >(</span>error<span class="token punctuation" >)</span> <span class="token operator" >=</span><span class="token operator" >></span> console<span class="token punctuation" >.</span><span class="token function" >error</span><span class="token punctuation" >(</span>error<span class="token punctuation" >)</span><span class="token punctuation" >,</span>
+  <span class="token comment" spellcheck="true">// Will log 'completed'</span>
+  <span class="token punctuation" >(</span><span class="token punctuation" >)</span> <span class="token operator" >=</span><span class="token operator" >></span> console<span class="token punctuation" >.</span><span class="token function" >log</span><span class="token punctuation" >(</span><span class="token string" >'completed'</span><span class="token punctuation" >)</span>
+<span class="token punctuation" >)</span><span class="token punctuation" >;</span>
+</code></pre>
+<p>And now the observable starts to emit values and
+the first argument for the subscribe method is the next handler which is called when the observable emits a value like this: <code>observer.onNext(10);</code>. The second argument is the error handler which is called if observable has encountered some error and the last argument is the complete handler which is called when the <code>onCompleted</code> method is called, that is after it has called onNext for the final time, if it has not encountered any errors.</p>
+<p>We can also unsubscribe from observables (unlike promises). To unsubscribe just call the <code>dispose</code> method on the subscription, like this:</p>
+<pre><code class="language-javascript"><span class="token keyword" >const</span> observable <span class="token operator" >=</span> Rx<span class="token punctuation" >.</span>Observable<span class="token punctuation" >.</span><span class="token function" >interval</span><span class="token punctuation" >(</span><span class="token number" >500</span><span class="token punctuation" >)</span><span class="token punctuation" >.</span><span class="token function" >take</span><span class="token punctuation" >(</span><span class="token number" >4</span><span class="token punctuation" >)</span><span class="token punctuation" >;</span>
+
+<span class="token keyword" >const</span> subscription <span class="token operator" >=</span> observable<span class="token punctuation" >.</span><span class="token function" >subscribe</span><span class="token punctuation" >(</span>
+  <span class="token punctuation" >(</span>value<span class="token punctuation" >)</span> <span class="token operator" >=</span><span class="token operator" >></span> console<span class="token punctuation" >.</span><span class="token function" >log</span><span class="token punctuation" >(</span>value<span class="token punctuation" >)</span>
+<span class="token punctuation" >)</span><span class="token punctuation" >;</span>
+
+<span class="token comment" spellcheck="true">// Unsubscribe after 1500 ms</span>
+<span class="token function" >setTimeout</span><span class="token punctuation" >(</span><span class="token punctuation" >(</span><span class="token punctuation" >)</span> <span class="token operator" >=</span><span class="token operator" >></span> <span class="token punctuation" >{</span>
+  subscription<span class="token punctuation" >.</span><span class="token function" >dispose</span><span class="token punctuation" >(</span><span class="token punctuation" >)</span><span class="token punctuation" >;</span>
+<span class="token punctuation" >}</span><span class="token punctuation" >,</span> <span class="token number" >1500</span><span class="token punctuation" >)</span><span class="token punctuation" >;</span>
+</code></pre>
+<p>Now we wont get any more data after the 1500 ms has gone and it will console log out:</p>
+<pre><code class="language-javascript"><span class="token number" >0</span>
+<span class="token number" >1</span>
+<span class="token number" >2</span>
+</code></pre>
+<p>And nothing more than that. (If we would not have unsubscribed we should have seen: 0, 1, 2, 3).</p>
+<p>That’s just a basic example how we can create an observable from scratch, subscribe to it and unsubscribe from it. We can also convert existing events, arrays and promises into observable collections using methods like: <code>Rx.Observable.fromEvent()</code>, <code>Rx.Observable.fromArray()</code>,
+<code>Rx.Observable.fromPromise()</code>.</p>
+<p>Here’s a simple example that creates an observable collection of events from the button element and the click event:</p>
+<pre><code class="language-javascript"><span class="token keyword" >const</span> buttonElement <span class="token operator" >=</span> document<span class="token punctuation" >.</span><span class="token function" >querySelector</span><span class="token punctuation" >(</span><span class="token string" >'button'</span><span class="token punctuation" >)</span><span class="token punctuation" >;</span>
+
+<span class="token keyword" >const</span> observable <span class="token operator" >=</span> Rx<span class="token punctuation" >.</span>Observable<span class="token punctuation" >.</span><span class="token function" >fromEvent</span><span class="token punctuation" >(</span>buttonElement<span class="token punctuation" >,</span> <span class="token string" >'click'</span><span class="token punctuation" >)</span><span class="token punctuation" >;</span>
+
+observable<span class="token punctuation" >.</span><span class="token function" >forEach</span><span class="token punctuation" >(</span>
+  <span class="token punctuation" >(</span>item<span class="token punctuation" >)</span> <span class="token operator" >=</span><span class="token operator" >></span> console<span class="token punctuation" >.</span><span class="token function" >log</span><span class="token punctuation" >(</span><span class="token string" >'clicked'</span><span class="token punctuation" >)</span>
+<span class="token punctuation" >)</span><span class="token punctuation" >;</span>
+</code></pre>
+<p>This would console log ‘clicked’ every time we click on the buttonElement.</p>
+<p>Another example that creates an observable collection from an promise:</p>
+<pre><code class="language-javascript"><span class="token keyword" >const</span> observable <span class="token operator" >=</span> Rx<span class="token punctuation" >.</span>Observable<span class="token punctuation" >.</span><span class="token function" >fromPromise</span><span class="token punctuation" >(</span>
+  <span class="token function" >fetch</span><span class="token punctuation" >(</span><span class="token string" >'https://api.github.com/repositories'</span><span class="token punctuation" >)</span>
+    <span class="token punctuation" >.</span><span class="token function" >then</span><span class="token punctuation" >(</span>response <span class="token operator" >=</span><span class="token operator" >></span> response<span class="token punctuation" >.</span><span class="token function" >json</span><span class="token punctuation" >(</span><span class="token punctuation" >)</span><span class="token punctuation" >)</span><span class="token punctuation" >)</span><span class="token punctuation" >;</span>
+
+observable<span class="token punctuation" >.</span><span class="token function" >forEach</span><span class="token punctuation" >(</span>
+  <span class="token punctuation" >(</span>json<span class="token punctuation" >)</span> <span class="token operator" >=</span><span class="token operator" >></span> <span class="token punctuation" >{</span>
+    console<span class="token punctuation" >.</span><span class="token function" >log</span><span class="token punctuation" >(</span>json<span class="token punctuation" >)</span><span class="token punctuation" >;</span>
+  <span class="token punctuation" >}</span><span class="token punctuation" >,</span>
+  <span class="token punctuation" >(</span>error<span class="token punctuation" >)</span> <span class="token operator" >=</span><span class="token operator" >></span> console<span class="token punctuation" >.</span><span class="token function" >log</span><span class="token punctuation" >(</span>error<span class="token punctuation" >)</span><span class="token punctuation" >,</span>
+  <span class="token punctuation" >(</span><span class="token punctuation" >)</span> <span class="token operator" >=</span><span class="token operator" >></span> console<span class="token punctuation" >.</span><span class="token function" >log</span><span class="token punctuation" >(</span><span class="token string" >'completed'</span><span class="token punctuation" >)</span>
+<span class="token punctuation" >)</span><span class="token punctuation" >;</span>
+</code></pre>
+<p>This would console log the response as json, log an error if that have accorded during fetching.</p>
+<h1>Why use RxJs?</h1>
+<p>Since error handling in asynchronous programming is hard, one reason to use Rx is because it makes it simpler to handle errors in asynchronous programming. We can also know when an observable is completed, that is when the observable is done emitting values, which is really great feature. Another thing that speaks for using observables is that an observable can emit more than 1 value, unlike promises that can only emit 1 value. Another feature that is great is that an observable is cancellable. It’s also easy to build powerful asynchronous apps with little and expressive code, using methods that we already know.</p>
+<p>I think that it’s really cool and fun to build asynchronous apps using RxJs and that’s really a great thing for why I want to use it.</p>
+<h1>Concrete examples</h1>
+<p>To really show the power of Rx, I will show two concrete examples with Rx in action.</p>
+<p>First out is a drag and drop:
+<a class="jsbin-embed" href="http://jsbin.com/yeguqerohi/embed?js,output">JS Bin on jsbin.com</a><script src="http://static.jsbin.com/js/embed.min.js?3.35.9"></script></p>
+<p>To walk through this code. First we’re using Rx’s fromEvent method that creates an observable collection of events from the given element and the given event as seen in the code, <code>mouseup</code>, <code>mousedown</code> and so on. Then we <code>map</code> over all the mousedown collection and for each mousedown we map over the mousemove collection and for each mousemove we return an object containing the left and top position of the element. The <code>takeUntil</code> method will let the mousemoves collection to produce values until the mouseups collection produces a value. So the mousemoves will stop emitting values when the mouseups starts to emit a value. This results in a two-dimensional array and therefore we need to flatten it by using <code>concatAll</code>.</p>
+<p>We then subscribe to this observable collection which gets an object containing the left and top of the element and finally we move the element.</p>
+<p>The second example is an autocomplete that queries the Github API:
+<a class="jsbin-embed" href="http://jsbin.com/gupenejoza/embed?js,output">JS Bin on jsbin.com</a><script src="http://static.jsbin.com/js/embed.min.js?3.35.9"></script></p>
+<p>And here is the fromEvent method used as well. We then map on the keypresses to get the value from the input. Then we debounce, which results in that we will only get the value after 250 ms (ignoring the first characters). Then we’re using the <code>distinctUntilChanged</code> method which will remove arrows and other control characters. Then  we’re mapping over each value and call the githubApi function with the value we entered in the input. Then the githubApi function does a request with value as query and returns the data as json. This will give us an a two-dimensional array and therefore we need to flatten it by using <code>concatAll</code>. Then we can just forEach over the result and add it to the dom.</p>
+<p>As you can see, it’s not so much code at all to do some really powerful stuff.</p>
+<h1>Conclusion</h1>
+<p>I think RxJs is really great and will keep on using it because I really enjoy doing asynchronous programming this way. I hope I have been able to spread some of my joy and knowledge about Rx through this post. And if you want to learn more about Reactive extensions, check out Jafar’s excellent talk about Reactive Extensions: <a href="https://www.youtube.com/watch?v=XRYN2xt11Ek">Async JavaScript with Reactive Extensions</a> and the <a href="http://xgrommx.github.io/rx-book/">rx-book</a>.</p>
+
+      </section>
+    </article>
+
+    <aside class="post">
+      <div id="disqus_thread"></div>
+      <script>
+        (function() {
+          var d = document, s = d.createElement('script');
+
+          s.src = '//jesperh.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    </aside>
+
+
+    </main>
+    <footer class="site-footer">
+      <section class="copyright">
+        <a href="https://jesperh.se">Jesper Håkansson</a> &copy; 2016
+        <a href="https://flic.kr/p/dz1YKB">Picture by JFXie used under CC BY</a>
+      </section>
+    </footer>
+  </body>
+</html>

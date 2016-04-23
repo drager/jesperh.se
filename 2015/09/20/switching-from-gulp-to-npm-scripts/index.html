@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="sv">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Switching from gulp to npm scripts</title>
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/assets/style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic|Open+Sans:700,400|Roboto+Slab">
+
+    <link rel="canonical" href="https://jesperh.se">
+    <meta name="referrer" content="origin">
+
+    <meta property="og:site_name" content="Jesper Håkansson">
+    <meta property="og:description" content="Studies web development. Dart, JS and opensource lover.">
+
+      <meta property="og:site_name" content="Jesper Håkansson">
+      <meta property="og:type" content="website">
+      <meta property="og:title" content="Jesper Håkansson">
+      <meta property="og:url" content="https://jesperh.se">
+      <meta property="og:image" content="https://jesperh.se/assets/logo.png">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Jesper Håkansson">
+    <meta name="twitter:description" content="Studies web development. Dart, JS and opensource lover.">
+    <meta name="twitter:url" content="https://jesperh.se">
+    <meta name="twitter:image:src" content="https://jesperh.se/assets/logo.png">
+
+    <link rel="alternate" type="application/rss+xml" title="Jesper Håkansson" href="https://jesperh.se/rss/">
+        <script type="application/ld+json">
+      {
+        "@context": "http://schema.org",
+        "@type": "Article",
+        "publisher": "Jesper Håkansson",
+        "author": {
+        "@type": "Person",
+          "name": "Jesper Håkansson",
+          "url": "https://jesperh.se/author/jesper",
+          "sameAs": "https://github.com/drager"
+        },
+        "headline": "Switching from gulp to npm scripts",
+        "url": "https://jesperh.se/switching-from-gulp-to-npm-scripts",
+        "datePublished": "2015-09-20T00:00:00.000Z",
+        
+        
+        "inLanguage": "en",
+        
+        "description": "We have been using a large build configuration in our angular application using gulp. Everything  from transpiling ES6, compiling sass, concatenating files and minifying them to trigger live reload. This resulted in a lot of configuration files for each task. Dividing each task into its on file is better than having everything in a tremendous file so this configuration was fine but not the best option for us. The bad truth with this configuration was that one or two people knows how this works (that had set it up once), so that affected the whole team a bit."
+      }
+    </script>
+
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-34213271-2', 'auto');
+ga('send', 'pageview');
+    </script>
+  </head>
+  <body>
+    <header class="site-header">
+      
+    <nav>
+      <a class="subscribe-button icon-feed" href="/rss/">Subscribe</a>
+      <a class="back-button icon-arrow-left" href="/">Home</a>
+    </nav>
+
+
+    </header>
+    <main>
+      
+    <article lang="en" class="post">
+      <header>
+        <h1>Switching from gulp to npm scripts</h1>
+        <time datetime="2015-09-20T00:00:00.000Z">September 20, 2015</time>
+      </header>
+
+      <section class="post-content">
+        
+        <meta http-equiv="refresh" content="0; url=/switching-from-gulp-to-npm-scripts">
+        <link rel="canonical" href="/switching-from-gulp-to-npm-scripts" />
+      <p>We have been using a large build configuration in our angular application using gulp. Everything  from transpiling ES6, compiling sass, concatenating files and minifying them to trigger live reload. This resulted in a lot of configuration files for each task. Dividing each task into its on file is better than having everything in a tremendous file so this configuration was fine but not the best option for us. The bad truth with this configuration was that one or two people knows how this works (that had set it up once), so that affected the whole team a bit.</p>
+<p>Check out this <a href="https://github.com/drager/bean/tree/master/gulp">repository</a> for an example of our gulp configuration.</p>
+<h2>Enter NPM scripts</h2>
+<p>We hadn’t heard much about using npm scripts for building our project but on <a href="http://nordicjs.com/">Nordic.js</a> <a href="http://blog.ibangspacebar.com/">Kate Hudson</a> from Mozilla had a great talk about it and convinced us to try it out. Once we tried it, we absolutely loved it! It was so easy and not as confusing as our large gulp configuration was. We were very pleased with the result and ease npm script had given us.</p>
+<p>So we were doing almost the same as we did in our gulp configuration with less lines of code, more readability and everyone in the team understood what was going on. With our simple npm scripts we were transpiling ES7, compiling TypeScript, compiling sass and so on.</p>
+<p>Here are our new configuration using npm scripts:</p>
+<pre><code>&quot;scripts&quot;: {
+    &quot;postinstall&quot;: &quot;tsd install&quot;,
+    &quot;start&quot;: &quot;npm run build &amp;&amp; npm run packager&quot;,
+    &quot;build&quot;: &quot;npm-run-all build:*&quot;,
+    &quot;build:typescript&quot;: &quot;tsconfig &amp;&amp; tsc&quot;,
+    &quot;build:babel&quot;: &quot;babel .tmp/ts --out-dir dist&quot;,
+    &quot;lint&quot;: &quot;npm-run-all lint:*&quot;,
+    &quot;lint:typescript&quot;: &quot;tslint `find app -name '*.ts?'`&quot;,
+    &quot;packager&quot;: &quot;node_modules/react-native/packager/packager.sh --skipflow --root dist&quot;,
+    &quot;tsconfig&quot;: &quot;tsconfig&quot;
+  }
+</code></pre>
+<p>Looks pretty neat and works perfect for our application though this configuration is not for an angular application its almost the same result as we wanted with our angular application.</p>
+<p>With that said, try out npm scripts! You’ll love it too.</p>
+
+      </section>
+    </article>
+
+    <aside class="post">
+      <div id="disqus_thread"></div>
+      <script>
+        (function() {
+          var d = document, s = d.createElement('script');
+
+          s.src = '//jesperh.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    </aside>
+
+
+    </main>
+    <footer class="site-footer">
+      <section class="copyright">
+        <a href="https://jesperh.se">Jesper Håkansson</a> &copy; 2016
+        <a href="https://flic.kr/p/dz1YKB">Picture by JFXie used under CC BY</a>
+      </section>
+    </footer>
+  </body>
+</html>
